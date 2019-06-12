@@ -1,5 +1,7 @@
 import math
 from pawn import Pawn
+from exception import OutOfBoardException
+from functools import reduce
 
 BASE_LINE_SIZE = 9
 
@@ -10,6 +12,8 @@ def init_game():
 
 
 def get_board(pawn):
+    if (is_out_of_board(pawn)):
+        raise OutOfBoardException("The pawn is out of the board")
     board = []
     for y in range(BASE_LINE_SIZE):
         line = []
@@ -22,16 +26,21 @@ def get_board(pawn):
     return board
 
 
+def is_out_of_board(pawn):
+    return is_out_of_base_line(pawn.x) or is_out_of_base_line(pawn.y)
+
+
+def is_out_of_base_line(coord):
+    return coord < 0 or coord >= BASE_LINE_SIZE
+
+
 def display_board(board):
     border = get_top_border(board)
     print(border)
-    for x in board:
+    
+    for row in board:
         line = "# "
-        for y in x:
-            if (y == 1):
-                line += "P "
-            else:
-                line += ". "
+        line = line.join(["P " if (y ==1) else ". " for y in row])
         line += "#"
         print(line)
     print(border)
