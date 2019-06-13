@@ -38,21 +38,34 @@ def is_out_of_base_line(coord):
 
 def progress(pawn):
     new_pawn = pawn
-    over = False
+    exit = False
+    victory = False
     console.clear()
-    console.prompt("Welcome to PyQuoridor, press ENTER to start")
-    while not over:
-        console.clear()
-        board = get_board(new_pawn)
-        console.display_game(board)
+    console.prompt("** Welcome to PyQuoridor **\n  Press Enter to start ...")
+    while not(exit or victory):
+        display(new_pawn)
         action = console.prompt_action()
         if action == EXIT:
-            over = True
+            exit = True
         else:
             try:
                 new_pawn = act(action, new_pawn)
             except OutOfBoardException:
                 pass
+        victory = is_a_victory(new_pawn)
+    if victory:
+        display(new_pawn)
+        console.display("** You won **")
+
+
+def display(pawn):
+    console.clear()
+    board = get_board(pawn)
+    console.display_game(board)
+
+
+def is_a_victory(pawn):
+    return pawn.x == BASE_LINE_SIZE - 1
 
 
 def act(action, pawn):

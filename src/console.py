@@ -43,3 +43,7 @@ def prompt_action():
 
 def prompt(message):
     return input(message)
+
+
+def display(message):
+    print(message)
