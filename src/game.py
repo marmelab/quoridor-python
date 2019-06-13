@@ -2,15 +2,10 @@ import math
 from pawn import Pawn, translate_x, translate_y
 from exception import OutOfBoardException
 from functools import reduce
+from action import UP, DOWN, LEFT, RIGHT, EXIT
 import console
 
 BASE_LINE_SIZE = 9
-
-UP = 8
-DOWN = 2
-LEFT = 4
-RIGHT = 6
-EXIT = 0
 
 
 def init_game():
