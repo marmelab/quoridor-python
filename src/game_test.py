@@ -174,3 +174,19 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(0, 4)
         # When Then
         self.assertRaises(OutOfBoardException, game.act, game.LEFT, pawn)
+
+    def test_is_a_victory_should_be_ok_the_pawn_reaches_the_opposite_base_line(self):
+        # Given
+        pawn = Pawn(8, 2)
+        # When
+        actual = game.is_a_victory(pawn)
+        # Then
+        self.assertTrue(actual, "The pawn should won, it reached the opponent base line")
+
+    def test_is_a_victory_should_not_be_ok_the_pawn_is_on_the_board(self):
+        # Given
+        pawn = Pawn(5, 4)
+        # When
+        actual = game.is_a_victory(pawn)
+        # Then
+        self.assertFalse(actual, "The game should continue, the pawn is on the board")
