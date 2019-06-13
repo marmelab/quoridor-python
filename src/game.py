@@ -40,7 +40,7 @@ def display_board(board):
     
     for row in board:
         line = "# "
-        line = line.join(["P " if (y ==1) else ". " for y in row])
+        line += "".join(["P " if (y ==1) else ". " for y in row])
         line += "#"
         print(line)
     print(border)
