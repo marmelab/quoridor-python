@@ -1,9 +1,16 @@
 import math
-from pawn import Pawn
+from pawn import Pawn, translate_x, translate_y
 from exception import OutOfBoardException
 from functools import reduce
+import console
 
 BASE_LINE_SIZE = 9
+
+UP = 8
+DOWN = 2
+LEFT = 4
+RIGHT = 6
+EXIT = 0
 
 
 def init_game():
@@ -34,21 +41,35 @@ def is_out_of_base_line(coord):
     return coord < 0 or coord >= BASE_LINE_SIZE
 
 
-def display_board(board):
-    border = get_top_border(board)
-    print(border)
-    
-    for row in board:
-        line = "# "
-        line += "".join(["P " if (y ==1) else ". " for y in row])
-        line += "#"
-        print(line)
-    print(border)
+def progress(pawn):
+    new_pawn = pawn
+    over = False
+    console.clear()
+    console.prompt("Welcome to PyQuoridor, press ENTER to start")
+    while not over:
+        console.clear()
+        board = get_board(new_pawn)
+        console.display_game(board)
+        action = console.prompt_action()
+        if action == EXIT:
+            over = True
+        else:
+            try:
+                new_pawn = act(action, new_pawn)
+            except OutOfBoardException:
+                pass
 
 
-def get_top_border(board):
-    border = "#"
-    for x in board:
-        border += "##"
-    border += "##"
-    return border
+def act(action, pawn):
+    new_pawn = pawn
+    if action == RIGHT:
+        new_pawn = translate_x(pawn, 1)
+    elif action == LEFT:
+        new_pawn = translate_x(pawn, -1)
+    elif action == DOWN:
+        new_pawn = translate_y(pawn, 1)
+    elif action == UP:
+        new_pawn = translate_y(pawn, -1)
+    if (is_out_of_board(new_pawn)):
+        raise OutOfBoardException("The pawn is out of the board")
+    return new_pawn

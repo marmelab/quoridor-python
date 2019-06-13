@@ -114,7 +114,7 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(9, 4)
         # When Then
         self.assertRaises(OutOfBoardException, game.get_board, pawn)
-    
+
     def test_get_board_should_throw_exception_if_pawn_y_is_greater_than_the_size_of_the_board(self):
         # Given
         pawn = Pawn(4, 9)
@@ -132,3 +132,45 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(0, -1)
         # When Then
         self.assertRaises(OutOfBoardException, game.get_board, pawn)
+
+    def test_act_should_move_the_pawn_one_square_to_the_top(self):
+        # Given
+        pawn = Pawn(0, 4)
+        expected = Pawn(0, 3)
+        # When
+        actual = game.act(game.UP, pawn)
+        # Then
+        self.assertEqual(actual, expected, "The pawn should move one square to the top")
+
+    def test_act_should_move_the_pawn_one_square_to_the_bottom(self):
+        # Given
+        pawn = Pawn(0, 4)
+        expected = Pawn(0, 5)
+        # When
+        actual = game.act(game.DOWN, pawn)
+        # Then
+        self.assertEqual(actual, expected, "The pawn should move one square to the bottom")
+
+    def test_act_should_move_the_pawn_one_square_to_the_right(self):
+        # Given
+        pawn = Pawn(0, 4)
+        expected = Pawn(1, 4)
+        # When
+        actual = game.act(game.RIGHT, pawn)
+        # Then
+        self.assertEqual(actual, expected, "The pawn should move one square to the right")
+
+    def test_act_should_move_the_pawn_one_square_to_the_right(self):
+        # Given
+        pawn = Pawn(1, 4)
+        expected = Pawn(0, 4)
+        # When
+        actual = game.act(game.LEFT, pawn)
+        # Then
+        self.assertEqual(actual, expected, "The pawn should move one square to the left")
+
+    def test_act_should_raise_the_exception_when_moving_out_of_the_board(self):
+        # Given
+        pawn = Pawn(0, 4)
+        # When Then
+        self.assertRaises(OutOfBoardException, game.act, game.LEFT, pawn)
