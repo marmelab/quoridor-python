@@ -1,5 +1,14 @@
 import os
-from action import UP, DOWN, LEFT, RIGHT, EXIT
+from action import Action
+from board import Item
+
+commands = {
+    Action.EXIT: "0",
+    Action.DOWN: "2",
+    Action.LEFT: "4",
+    Action.RIGHT: "6",
+    Action.UP: "8"
+}
 
 
 def clear():
@@ -10,18 +19,26 @@ def display_game(board):
     border = get_top_border(board)
     print(border)
     for row in board:
-        line = "# "
-        line += "".join(["P " if y == 1 else ". " for y in row])
-        line += "#"
+        line = "\u25ae "
+        for cell in row:
+            if cell == Item.PAWN:
+                line += "\u25b2 "
+            elif cell == Item.FENCE:
+                line += "\u25fc "
+            elif cell == Item.SQUARE:
+                line += "\u25a1 "
+            else:
+                line += "  "
+        line += "\u25ae"
         print(line)
     print(border)
 
 
 def get_top_border(board):
-    border = "#"
+    border = "\u25ac"
     for x in board:
-        border += "##"
-    border += "##"
+        border += "\u25ac\u25ac"
+    border += "\u25ac\u25ac"
     return border
 
 
@@ -31,7 +48,7 @@ def prompt_action():
     while invalid:
         message = "Where do you want to move the pawn?\n" + \
             "Choose in list and type ENTER (UP: {}, RIGHT: {}, DOWN: {}, LEFT: {} EXIT: {})\n" \
-            .format(UP, RIGHT, DOWN, LEFT, EXIT)
+            .format(commands[Action.UP], commands[Action.RIGHT], commands[Action.DOWN], commands[Action.LEFT], commands[Action.EXIT])
         action = prompt(message)
         try:
             move = int(action)
