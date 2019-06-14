@@ -210,3 +210,111 @@ class TestBoard(unittest.TestCase):
         actual = get_board(pawn, fences)
         # Then
         self.assertEqual(actual, expected, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_crossable_should_not_be_possible_top_right(self):
+        # Given
+        pawn = Pawn(0, 8)
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [2, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = is_crossable_right(pawn, fences)
+        # Then
+        self.assertFalse(actual, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_crossable_should_not_be_possible_bottom_right(self):
+        # Given
+        pawn = Pawn(0, 8)
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [2, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = is_crossable_right(pawn, fences)
+        # Then
+        self.assertFalse(actual, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_crossable_should_be_possible_on_the_top_of_the_board(self):
+        # Given
+        pawn = Pawn(0, 0)
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = is_crossable_right(pawn, fences)
+        # Then
+        self.assertTrue(actual, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_crossable_should_be_possible_on_the_bottom_of_the_board(self):
+        # Given
+        pawn = Pawn(0, 17)
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = is_crossable_right(pawn, fences)
+        # Then
+        self.assertTrue(actual, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_crossable_up_should_not_be_possible_top_right(self):
+        # Given
+        pawn = Pawn(0, 8)
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = is_crossable_up(pawn, fences)
+        # Then
+        self.assertFalse(actual, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_crossable_down_should_not_be_possible_top_right(self):
+        # Given
+        pawn = Pawn(2, 8)
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = is_crossable_down(pawn, fences)
+        # Then
+        self.assertFalse(actual, "In the board, the pawn should be placed in the bottom right of the board")

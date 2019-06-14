@@ -1,6 +1,6 @@
 import math
 from random import randint
-from copy import deepcopy 
+from copy import deepcopy
 from enum import IntEnum
 from exception import OutOfBoardException
 
@@ -81,3 +81,61 @@ def is_out_of_board(pawn):
 
 def is_out_of_base_line(coord):
     return coord < 0 or coord >= BASE_LINE_SIZE
+
+
+def is_crossable_right(pawn, fences):
+    top_right_fence = get_top_right_fence(pawn, fences)
+    bottom_right_fence = get_bottom_right_fence(pawn, fences)
+    return top_right_fence != Direction.VERTICALLY and bottom_right_fence != Direction.VERTICALLY
+
+
+def is_crossable_left(pawn, fences):
+    top_left_fence = get_top_left_fence(pawn, fences)
+    bottom_left_fence = get_bottom_left_fence(pawn, fences)
+    return top_left_fence != Direction.VERTICALLY and bottom_left_fence != Direction.VERTICALLY
+
+
+def is_crossable_up(pawn, fences):
+    top_left_fence = get_top_left_fence(pawn, fences)
+    top_right_fence = get_top_right_fence(pawn, fences)
+    return top_left_fence != Direction.HORIZONTALLY and top_right_fence != Direction.HORIZONTALLY
+
+
+def is_crossable_down(pawn, fences):
+    bottom_left_fence = get_bottom_left_fence(pawn, fences)
+    bottom_right_fence = get_bottom_right_fence(pawn, fences)
+    return bottom_left_fence != Direction.HORIZONTALLY and bottom_right_fence != Direction.HORIZONTALLY
+
+
+def get_top_left_fence(pawn, fences):
+    top_left_fence = Direction.NO
+    if pawn.x - 1 > 0 and pawn.y - 1 > 0:
+        top_left_fence = get_fence(pawn.x - 1, pawn.y - 1, fences)
+    return top_left_fence
+
+
+def get_top_right_fence(pawn, fences):
+    top_right_fence = Direction.NO
+    if (pawn.x + 1 < BASE_LINE_SIZE and pawn.y - 1 > 0):
+        top_right_fence = get_fence(pawn.x + 1, pawn.y - 1, fences)
+    return top_right_fence
+
+
+def get_bottom_left_fence(pawn, fences):
+    bottom_left_fence = Direction.NO
+    if pawn.x - 1 > 0 and pawn.y + 1 < BASE_LINE_SIZE:
+        bottom_left_fence = get_fence(pawn.x - 1, pawn.y + 1, fences)
+    return bottom_left_fence
+
+
+def get_bottom_right_fence(pawn, fences):
+    bottom_right_fence = Direction.NO
+    if pawn.x + 1 < BASE_LINE_SIZE and pawn.y + 1 < BASE_LINE_SIZE:
+        bottom_right_fence = get_fence(pawn.x + 1, pawn.y + 1, fences)
+    return bottom_right_fence
+
+
+def get_fence(x, y, fences):
+    fence_x = math.ceil(x / 2) - 1
+    fence_y = math.ceil(y / 2) - 1
+    return fences[fence_y][fence_x]

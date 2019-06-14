@@ -4,7 +4,7 @@ from exception import OutOfBoardException
 from functools import reduce
 from action import Action
 import console
-from board import build, get_board, BASE_LINE_SIZE, is_out_of_board
+from board import *
 
 
 def init_game():
@@ -26,7 +26,7 @@ def progress(pawn):
             quit = True
         else:
             try:
-                new_pawn = act(action, new_pawn)
+                new_pawn = act(action, new_pawn, new_fences)
             except OutOfBoardException:
                 pass
         victory = is_a_victory(new_pawn)
@@ -45,16 +45,28 @@ def is_a_victory(pawn):
     return pawn.x == BASE_LINE_SIZE - 1
 
 
-def act(action, pawn):
+def act(action, pawn, fences):
     new_pawn = pawn
     if action == Action.RIGHT:
-        new_pawn = translate_x(pawn, 2)
+        if is_crossable_right(pawn, fences):
+            new_pawn = translate_x(pawn, 2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
     elif action == Action.LEFT:
-        new_pawn = translate_x(pawn, -2)
+        if is_crossable_left(pawn, fences):
+            new_pawn = translate_x(pawn, -2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
     elif action == Action.DOWN:
-        new_pawn = translate_y(pawn, 2)
+        if is_crossable_down(pawn, fences):
+            new_pawn = translate_y(pawn, 2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
     elif action == Action.UP:
-        new_pawn = translate_y(pawn, -2)
-    if (is_out_of_board(new_pawn)):
+        if is_crossable_up(pawn, fences):
+            new_pawn = translate_y(pawn, -2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
+    if is_out_of_board(new_pawn):
         raise OutOfBoardException("The pawn is out of the board")
     return new_pawn
