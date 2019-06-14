@@ -19,26 +19,26 @@ def display_game(board):
     border = get_top_border(board)
     print(border)
     for row in board:
-        line = "# "
+        line = "\u25ae "
         for cell in row:
             if cell == Item.PAWN:
-                line += "▲ "
+                line += "\u25b2 "
             elif cell == Item.FENCE:
-                line += "# "
+                line += "\u25fc "
             elif cell == Item.SQUARE:
-                line += "□ "
+                line += "\u25a1 "
             else:
                 line += "  "
-        line += "#"
+        line += "\u25ae"
         print(line)
     print(border)
 
 
 def get_top_border(board):
-    border = "#"
+    border = "\u25ac"
     for x in board:
-        border += "##"
-    border += "##"
+        border += "\u25ac\u25ac"
+    border += "\u25ac\u25ac"
     return border
 
 

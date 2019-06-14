@@ -25,7 +25,7 @@ def build():
     for i in range(10):
         center_x = randint(0, FENCE_SIZE - 1)
         center_y = randint(0, FENCE_SIZE - 1)
-        direction = randint(HORIZONTALLY, VERTICALLY)
+        direction = randint(Direction.HORIZONTALLY, Direction.VERTICALLY)
         fences[center_x][center_y] = direction
     return fences
 
