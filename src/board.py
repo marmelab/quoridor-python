@@ -1,7 +1,8 @@
 import math
 from random import randint
-from exception import OutOfBoardException
+from copy import deepcopy 
 from enum import IntEnum
+from exception import OutOfBoardException
 
 FENCE_SIZE = 8
 BASE_LINE_SIZE = 17
@@ -57,7 +58,7 @@ def is_odd(number):
 
 
 def add_fences(board, fences):
-    new_board = board.deepcopy()
+    new_board = deepcopy(board)
     for x in range(FENCE_SIZE):
         for y in range(FENCE_SIZE):
             center_x = x * 2 + 1
