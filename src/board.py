@@ -57,7 +57,7 @@ def is_odd(number):
 
 
 def add_fences(board, fences):
-    new_board = board.copy()
+    new_board = board.deepcopy()
     for x in range(FENCE_SIZE):
         for y in range(FENCE_SIZE):
             center_x = x * 2 + 1
