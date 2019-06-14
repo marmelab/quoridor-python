@@ -4,8 +4,9 @@ from exception import OutOfBoardException
 from functools import reduce
 from action import Action
 import console
+from board import SQUARE, PAWN, NO_FENCE, FENCE
 
-BASE_LINE_SIZE = 9
+BASE_LINE_SIZE = 17
 
 
 def init_game():
@@ -20,10 +21,12 @@ def get_board(pawn):
     for y in range(BASE_LINE_SIZE):
         line = []
         for x in range(BASE_LINE_SIZE):
-            if (pawn.x == x and pawn.y == y):
-                line.append(1)
+            if pawn.x == x and pawn.y == y:
+                line.append(PAWN)
+            elif x % 2 != 0 or y % 2 != 0:
+                line.append(NO_FENCE)
             else:
-                line.append(0)
+                line.append(SQUARE)
         board.append(line)
     return board
 
@@ -71,13 +74,13 @@ def is_a_victory(pawn):
 def act(action, pawn):
     new_pawn = pawn
     if action == Action.RIGHT:
-        new_pawn = translate_x(pawn, 1)
+        new_pawn = translate_x(pawn, 2)
     elif action == Action.LEFT:
-        new_pawn = translate_x(pawn, -1)
+        new_pawn = translate_x(pawn, -2)
     elif action == Action.DOWN:
-        new_pawn = translate_y(pawn, 1)
+        new_pawn = translate_y(pawn, 2)
     elif action == Action.UP:
-        new_pawn = translate_y(pawn, -1)
+        new_pawn = translate_y(pawn, -2)
     if (is_out_of_board(new_pawn)):
         raise OutOfBoardException("The pawn is out of the board")
     return new_pawn

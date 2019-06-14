@@ -1,13 +1,15 @@
 import os
 from action import Action
+from board import PAWN, FENCE, SQUARE
 
 commands = {
     Action.EXIT: "0",
     Action.DOWN: "2",
     Action.LEFT: "4",
     Action.RIGHT: "6",
-    Action.UP: "8" 
+    Action.UP: "8"
 }
+
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -18,7 +20,15 @@ def display_game(board):
     print(border)
     for row in board:
         line = "# "
-        line += "".join(["P " if y == 1 else ". " for y in row])
+        for cell in row:
+            if cell == PAWN:
+                line += "▲ "
+            elif cell == FENCE:
+                line += "# "
+            elif cell == SQUARE:
+                line += "□ "
+            else:
+                line += "  "
         line += "#"
         print(line)
     print(border)

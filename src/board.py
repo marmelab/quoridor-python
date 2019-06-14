@@ -1,0 +1,4 @@
+NO_FENCE = 0
+FENCE = 1
+SQUARE = 2
+PAWN = 3
