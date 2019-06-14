@@ -1,6 +1,6 @@
 import os
 from action import Action
-from board import PAWN, FENCE, SQUARE
+from board import Item
 
 commands = {
     Action.EXIT: "0",
@@ -21,11 +21,11 @@ def display_game(board):
     for row in board:
         line = "# "
         for cell in row:
-            if cell == PAWN:
+            if cell == Item.PAWN:
                 line += "▲ "
-            elif cell == FENCE:
+            elif cell == Item.FENCE:
                 line += "# "
-            elif cell == SQUARE:
+            elif cell == Item.SQUARE:
                 line += "□ "
             else:
                 line += "  "

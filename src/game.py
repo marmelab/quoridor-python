@@ -4,9 +4,7 @@ from exception import OutOfBoardException
 from functools import reduce
 from action import Action
 import console
-from board import SQUARE, PAWN, NO_FENCE, FENCE
-
-BASE_LINE_SIZE = 17
+from board import build, get_board, BASE_LINE_SIZE, is_out_of_board
 
 
 def init_game():
@@ -14,39 +12,15 @@ def init_game():
     return Pawn(0, center)
 
 
-def get_board(pawn):
-    if (is_out_of_board(pawn)):
-        raise OutOfBoardException("The pawn is out of the board")
-    board = []
-    for y in range(BASE_LINE_SIZE):
-        line = []
-        for x in range(BASE_LINE_SIZE):
-            if pawn.x == x and pawn.y == y:
-                line.append(PAWN)
-            elif x % 2 != 0 or y % 2 != 0:
-                line.append(NO_FENCE)
-            else:
-                line.append(SQUARE)
-        board.append(line)
-    return board
-
-
-def is_out_of_board(pawn):
-    return is_out_of_base_line(pawn.x) or is_out_of_base_line(pawn.y)
-
-
-def is_out_of_base_line(coord):
-    return coord < 0 or coord >= BASE_LINE_SIZE
-
-
 def progress(pawn):
     new_pawn = pawn
+    new_fences = build()
     quit = False
     victory = False
     console.clear()
     console.prompt("** Welcome to PyQuoridor **\n  Press Enter to start ...")
     while not(quit or victory):
-        display(new_pawn)
+        display(new_pawn, new_fences)
         action = console.prompt_action()
         if action == Action.EXIT:
             quit = True
@@ -57,13 +31,13 @@ def progress(pawn):
                 pass
         victory = is_a_victory(new_pawn)
     if victory:
-        display(new_pawn)
+        display(new_pawn, new_fences)
         console.display("** You won **")
 
 
-def display(pawn):
+def display(pawn, fences):
     console.clear()
-    board = get_board(pawn)
+    board = get_board(pawn, fences)
     console.display_game(board)
 
 
