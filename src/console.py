@@ -1,6 +1,13 @@
 import os
-from action import UP, DOWN, LEFT, RIGHT, EXIT
+from action import Action
 
+commands = {
+    Action.EXIT: "0",
+    Action.DOWN: "2",
+    Action.LEFT: "4",
+    Action.RIGHT: "6",
+    Action.UP: "8" 
+}
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -31,7 +38,7 @@ def prompt_action():
     while invalid:
         message = "Where do you want to move the pawn?\n" + \
             "Choose in list and type ENTER (UP: {}, RIGHT: {}, DOWN: {}, LEFT: {} EXIT: {})\n" \
-            .format(UP, RIGHT, DOWN, LEFT, EXIT)
+            .format(commands[Action.UP], commands[Action.RIGHT], commands[Action.DOWN], commands[Action.LEFT], commands[Action.EXIT])
         action = prompt(message)
         try:
             move = int(action)

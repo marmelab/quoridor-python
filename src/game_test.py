@@ -2,7 +2,7 @@ import unittest
 import game
 from pawn import Pawn
 from exception import OutOfBoardException
-
+from action import Action
 
 class TestGameMethods(unittest.TestCase):
 
@@ -138,7 +138,7 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(0, 4)
         expected = Pawn(0, 3)
         # When
-        actual = game.act(game.UP, pawn)
+        actual = game.act(Action.UP, pawn)
         # Then
         self.assertEqual(actual, expected, "The pawn should move one square to the top")
 
@@ -147,7 +147,7 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(0, 4)
         expected = Pawn(0, 5)
         # When
-        actual = game.act(game.DOWN, pawn)
+        actual = game.act(Action.DOWN, pawn)
         # Then
         self.assertEqual(actual, expected, "The pawn should move one square to the bottom")
 
@@ -156,7 +156,7 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(0, 4)
         expected = Pawn(1, 4)
         # When
-        actual = game.act(game.RIGHT, pawn)
+        actual = game.act(Action.RIGHT, pawn)
         # Then
         self.assertEqual(actual, expected, "The pawn should move one square to the right")
 
@@ -165,7 +165,7 @@ class TestGameMethods(unittest.TestCase):
         pawn = Pawn(1, 4)
         expected = Pawn(0, 4)
         # When
-        actual = game.act(game.LEFT, pawn)
+        actual = game.act(Action.LEFT, pawn)
         # Then
         self.assertEqual(actual, expected, "The pawn should move one square to the left")
 
@@ -173,7 +173,7 @@ class TestGameMethods(unittest.TestCase):
         # Given
         pawn = Pawn(0, 4)
         # When Then
-        self.assertRaises(OutOfBoardException, game.act, game.LEFT, pawn)
+        self.assertRaises(OutOfBoardException, game.act, Action.LEFT, pawn)
 
     def test_is_a_victory_should_be_ok_the_pawn_reaches_the_opposite_base_line(self):
         # Given
