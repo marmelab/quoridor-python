@@ -1,10 +1,10 @@
 import math
 from pawn import Pawn, translate_x, translate_y
-from exception import OutOfBoardException
+from exception import QuoridorException, OutOfBoardException, UnknownActionException
 from functools import reduce
 from action import Action
 import console
-from board import build, get_board, BASE_LINE_SIZE, is_out_of_board
+from board import *
 
 
 def init_game():
@@ -26,8 +26,8 @@ def progress(pawn):
             quit = True
         else:
             try:
-                new_pawn = act(action, new_pawn)
-            except OutOfBoardException:
+                new_pawn = act(action, new_pawn, new_fences)
+            except QuoridorException:
                 pass
         victory = is_a_victory(new_pawn)
     if victory:
@@ -45,16 +45,42 @@ def is_a_victory(pawn):
     return pawn.x == BASE_LINE_SIZE - 1
 
 
-def act(action, pawn):
-    new_pawn = pawn
+def act(action, pawn, fences):
+    new_pawn = None
     if action == Action.RIGHT:
-        new_pawn = translate_x(pawn, 2)
+        new_pawn = move_right(pawn, fences)
     elif action == Action.LEFT:
-        new_pawn = translate_x(pawn, -2)
+        new_pawn = move_left(pawn, fences)
     elif action == Action.DOWN:
-        new_pawn = translate_y(pawn, 2)
+        new_pawn = move_down(pawn, fences)
     elif action == Action.UP:
-        new_pawn = translate_y(pawn, -2)
-    if (is_out_of_board(new_pawn)):
+        new_pawn = move_up(pawn, fences)
+    else:
+        raise UnknownActionException()
+    if is_out_of_board(new_pawn):
         raise OutOfBoardException("The pawn is out of the board")
     return new_pawn
+
+
+def move_right(pawn, fences):
+    if not is_crossable_right(pawn, fences):
+        raise OutOfBoardException("The pawn cannot cross")
+    return translate_x(pawn, 2)
+
+
+def move_left(pawn, fences):
+    if not is_crossable_left(pawn, fences):
+        raise OutOfBoardException("The pawn cannot cross")
+    return translate_x(pawn, -2)
+
+
+def move_up(pawn, fences):
+    if not is_crossable_up(pawn, fences):
+        raise OutOfBoardException("The pawn cannot cross")
+    return translate_y(pawn, -2)
+
+
+def move_down(pawn, fences):
+    if not is_crossable_down(pawn, fences):
+        raise OutOfBoardException("The pawn cannot cross")
+    return translate_y(pawn, 2)

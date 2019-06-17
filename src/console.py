@@ -2,6 +2,7 @@ import os
 from action import Action
 from board import Item
 
+
 commands = {
     Action.EXIT: "0",
     Action.DOWN: "2",
@@ -9,6 +10,13 @@ commands = {
     Action.RIGHT: "6",
     Action.UP: "8"
 }
+
+
+def get_action(input_key):
+    for action, key in commands.items():
+        if key == input_key:
+            return action
+    return Action.UNKNOWN
 
 
 def clear():
@@ -43,19 +51,15 @@ def get_top_border(board):
 
 
 def prompt_action():
-    invalid = True
-    move = 0
-    while invalid:
-        message = "Where do you want to move the pawn?\n" + \
-            "Choose in list and type ENTER (UP: {}, RIGHT: {}, DOWN: {}, LEFT: {} EXIT: {})\n" \
-            .format(commands[Action.UP], commands[Action.RIGHT], commands[Action.DOWN], commands[Action.LEFT], commands[Action.EXIT])
-        action = prompt(message)
-        try:
-            move = int(action)
-            invalid = False
-        except ValueError:
-            invalid = True
-    return move
+    key = prompt("Where do you want to move the pawn?\nChoose in list and type ENTER " + get_action_list())
+    return get_action(key)
+
+
+def get_action_list():
+    message = "("
+    message += ", ".join([f"{action.name}: {key}" for action, key in commands.items()])
+    message += ")"
+    return message
 
 
 def prompt(message):
