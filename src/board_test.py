@@ -267,7 +267,7 @@ class TestBoard(unittest.TestCase):
 
     def test_crossable_should_be_possible_on_the_bottom_of_the_board(self):
         # Given
-        pawn = Pawn(0, 17)
+        pawn = Pawn(0, 16)
         fences = [
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
