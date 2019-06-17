@@ -12,9 +12,9 @@ commands = {
 }
 
 
-def get_action(inputKey):
+def get_action(input_key):
     for action, key in commands.items():
-        if key == inputKey:
+        if key == input_key:
             return action
     return Action.UNKNOWN
 
