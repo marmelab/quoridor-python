@@ -29,8 +29,10 @@ def display_game(board):
     for row in board:
         line = "\u25ae "
         for cell in row:
-            if cell == Item.PAWN:
+            if cell == Item.PAWN_1:
                 line += "\u25b2 "
+            elif cell == Item.PAWN_2:
+                line += "\u25b3 "
             elif cell == Item.FENCE:
                 line += "\u25fc "
             elif cell == Item.SQUARE:
@@ -50,8 +52,9 @@ def get_top_border(board):
     return border
 
 
-def prompt_action():
-    key = prompt("Where do you want to move the pawn?\nChoose in list and type ENTER " + get_action_list())
+def prompt_action(player_number):
+    print("Possible actions: " + get_action_list())
+    key = prompt("Player #" + str(player_number) + ": Where do you want to move the pawn? ")
     return get_action(key)
 
 

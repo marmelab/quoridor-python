@@ -10,7 +10,7 @@ class TestGame(unittest.TestCase):
 
     def test_init_game_should_add_the_pawn_in_the_center_of_the_base_line(self):
         # Given
-        expected = Pawn(0, 8)
+        expected = [Pawn(0, 8), Pawn(16, 8)]
         # When
         actual = game.init_game()
         # Then
@@ -71,16 +71,16 @@ class TestGame(unittest.TestCase):
 
     def test_is_a_victory_should_be_ok_the_pawn_reaches_the_opposite_base_line(self):
         # Given
-        pawn = Pawn(16, 4)
+        pawns = [Pawn(16, 4)]
         # When
-        actual = game.is_a_victory(pawn)
+        actual = game.is_a_victory(pawns)
         # Then
         self.assertTrue(actual, "The pawn should won, it reached the opponent base line")
 
     def test_is_a_victory_should_not_be_ok_the_pawn_is_on_the_board(self):
         # Given
-        pawn = Pawn(10, 8)
+        pawns = [Pawn(10, 8)]
         # When
-        actual = game.is_a_victory(pawn)
+        actual = game.is_a_victory(pawns)
         # Then
         self.assertFalse(actual, "The game should continue, the pawn is on the board")

@@ -2,8 +2,8 @@ import game
 
 
 def main():
-    pawn = game.init_game()
-    game.progress(pawn)
+    pawns = game.init_game()
+    game.progress(pawns)
 
 
 if __name__ == "__main__":

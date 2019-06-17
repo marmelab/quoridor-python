@@ -9,40 +9,44 @@ from board import *
 
 def init_game():
     center = math.floor(BASE_LINE_SIZE / 2)
-    return Pawn(0, center)
+    return [Pawn(0, center), Pawn(BASE_LINE_SIZE -1, center)]
 
 
-def progress(pawn):
-    new_pawn = pawn
+def progress(pawns):
+    new_pawns = pawns
     new_fences = build()
+    player_turn = 1
     quit = False
     victory = False
     console.clear()
     console.prompt("** Welcome to PyQuoridor **\n  Press Enter to start ...")
     while not(quit or victory):
-        display(new_pawn, new_fences)
-        action = console.prompt_action()
+        display(new_pawns, new_fences)
+        action = console.prompt_action(player_turn)
         if action == Action.EXIT:
             quit = True
         else:
             try:
-                new_pawn = act(action, new_pawn, new_fences)
+                new_pawn = act(action, new_pawns[player_turn - 1], new_fences)
+                new_pawns = deepcopy(new_pawns)
+                new_pawns[player_turn - 1] = new_pawn
             except QuoridorException:
                 pass
-        victory = is_a_victory(new_pawn)
+        victory = is_a_victory(new_pawns)
     if victory:
-        display(new_pawn, new_fences)
+        display(new_pawns, new_fences)
         console.display("** You won **")
 
 
-def display(pawn, fences):
+def display(pawns, fences):
     console.clear()
-    board = get_board(pawn, fences)
+    board = get_board(pawns, fences)
     console.display_game(board)
 
 
-def is_a_victory(pawn):
-    return pawn.x == BASE_LINE_SIZE - 1
+def is_a_victory(pawns):
+    #TODO direction
+    return pawns[0].x == BASE_LINE_SIZE - 1
 
 
 def act(action, pawn, fences):
