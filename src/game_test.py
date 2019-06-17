@@ -2,7 +2,7 @@ import unittest
 import game
 from pawn import Pawn
 from board import FENCE_SIZE, Direction
-from exception import OutOfBoardException
+from exception import OutOfBoardException, UnknownActionException
 from action import Action
 
 
@@ -54,6 +54,13 @@ class TestGame(unittest.TestCase):
         actual = game.act(Action.LEFT, pawn, fences)
         # Then
         self.assertEqual(actual, expected, "The pawn should move one square to the left")
+
+    def test_act_should_raise_exception_with_unknown_action(self):
+        # Given
+        pawn = Pawn(2, 8)
+        fences = [[Direction.NO for i in range(FENCE_SIZE)] for j in range(FENCE_SIZE)]
+        # When Then
+        self.assertRaises(UnknownActionException, game.act, Action.UNKNOWN, pawn, fences)
 
     def test_act_should_raise_the_exception_when_moving_out_of_the_board(self):
         # Given
