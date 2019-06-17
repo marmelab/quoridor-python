@@ -57,9 +57,7 @@ def prompt_action():
 
 def get_action_list():
     message = "("
-    for action, key in commands.items():
-        message += action.name + ": " + key + ", "
-    message = message[:-2]
+    message += ", ".join([f"{action.name}: {key}" for action, key in commands.items()])
     message += ")"
     return message
 
