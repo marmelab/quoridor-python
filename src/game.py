@@ -9,6 +9,7 @@ from board import *
 
 from enum import IntEnum
 
+STEP = 2
 
 class State(IntEnum):
     RUNNING = 0,
@@ -36,7 +37,8 @@ def progress(pawns):
         else:
             try:
                 new_pawns = deepcopy(new_pawns)
-                new_pawn = act(action, new_pawns[player_turn - 1], new_fences)
+                opponent = new_pawns[get_next_player(player_turn, new_pawns) - 1]
+                new_pawn = act(action, new_pawns[player_turn - 1], opponent, new_fences)
                 new_pawns[player_turn - 1] = new_pawn
                 if is_a_victory(new_pawn):
                     state = State.VICTORY
@@ -70,16 +72,16 @@ def is_a_victory(pawn):
     return victory
 
 
-def act(action, pawn, fences):
+def act(action, pawn, opponent, fences):
     new_pawn = None
     if action == Action.RIGHT:
-        new_pawn = move_right(pawn, fences)
+        new_pawn = move_right(pawn, opponent, fences)
     elif action == Action.LEFT:
-        new_pawn = move_left(pawn, fences)
+        new_pawn = move_left(pawn, opponent, fences)
     elif action == Action.DOWN:
-        new_pawn = move_down(pawn, fences)
+        new_pawn = move_down(pawn, opponent, fences)
     elif action == Action.UP:
-        new_pawn = move_up(pawn, fences)
+        new_pawn = move_up(pawn, opponent, fences)
     else:
         raise UnknownActionException()
     if is_out_of_board(new_pawn):
@@ -87,25 +89,61 @@ def act(action, pawn, fences):
     return new_pawn
 
 
-def move_right(pawn, fences):
+def move_right(pawn, opponent, fences):
     if not is_crossable_right(pawn, fences):
         raise OutOfBoardException("The pawn cannot cross")
-    return translate_x(pawn, 2)
+    if is_opponent_right(pawn, opponent):
+        if is_crossable_right(opponent, fences):
+            return translate_x(pawn, STEP * 2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
+    return translate_x(pawn, STEP)
 
 
-def move_left(pawn, fences):
+def move_left(pawn, opponent, fences):
     if not is_crossable_left(pawn, fences):
         raise OutOfBoardException("The pawn cannot cross")
-    return translate_x(pawn, -2)
+    if is_opponent_left(pawn, opponent):
+        if is_crossable_left(opponent, fences):
+            return translate_x(pawn, -STEP * 2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
+    return translate_x(pawn, -STEP)
 
 
-def move_up(pawn, fences):
+def move_up(pawn, opponent, fences):
     if not is_crossable_up(pawn, fences):
         raise OutOfBoardException("The pawn cannot cross")
-    return translate_y(pawn, -2)
+    if is_opponent_up(pawn, opponent):
+        if is_crossable_up(opponent, fences):
+            return translate_y(pawn, -STEP * 2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
+    return translate_y(pawn, -STEP)
 
 
-def move_down(pawn, fences):
+def move_down(pawn, opponent, fences):
     if not is_crossable_down(pawn, fences):
         raise OutOfBoardException("The pawn cannot cross")
-    return translate_y(pawn, 2)
+    if is_opponent_down(pawn, opponent):
+        if is_crossable_down(opponent, fences):
+            return translate_y(pawn, STEP * 2)
+        else:
+            raise OutOfBoardException("The pawn cannot cross")
+    return translate_y(pawn, STEP)
+
+
+def is_opponent_right(pawn, opponent):
+    return pawn.x + STEP == opponent.x and pawn.y == opponent.y
+
+
+def is_opponent_left(pawn, opponent):
+    return pawn.x - STEP == opponent.x and pawn.y == opponent.y
+
+
+def is_opponent_up(pawn, opponent):
+    return pawn.x == opponent.x and pawn.y - STEP == opponent.y
+
+
+def is_opponent_down(pawn, opponent):
+    return pawn.x == opponent.x and pawn.y + STEP == opponent.y
