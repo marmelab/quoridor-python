@@ -44,12 +44,7 @@ def get_board(pawns, fences):
 
 
 def get_pawn_item(index):
-    item = None
-    if index == 0:
-        item = Item.PAWN_1
-    else:
-        item = Item.PAWN_2
-    return item
+    return Item.PAWN_1 if index == 0 else Item.PAWN_2
 
 
 def get_empty_board():

@@ -1,4 +1,5 @@
 import math
+from copy import deepcopy
 from pawn import Orientation, Pawn, translate_x, translate_y
 from exception import QuoridorException, OutOfBoardException, UnknownActionException
 from functools import reduce
@@ -21,12 +22,12 @@ def init_game():
 
 
 def progress(pawns):
-    new_pawns = pawns
     new_fences = build()
     player_turn = 1
     state = State.RUNNING
     console.clear()
     console.prompt("\n *** Welcome to PyQuoridor ***\n  Press Enter to start ...")
+    new_pawns = deepcopy(pawns)
     while state == State.RUNNING:
         display(new_pawns, new_fences)
         action = console.prompt_action(player_turn)
@@ -34,8 +35,8 @@ def progress(pawns):
             state = State.QUIT
         else:
             try:
-                new_pawn = act(action, new_pawns[player_turn - 1], new_fences)
                 new_pawns = deepcopy(new_pawns)
+                new_pawn = act(action, new_pawns[player_turn - 1], new_fences)
                 new_pawns[player_turn - 1] = new_pawn
                 if is_a_victory(new_pawn):
                     state = State.VICTORY
@@ -50,10 +51,8 @@ def progress(pawns):
 
 def get_next_player(player_turn, pawns):
     if player_turn + 1 > len(pawns):
-        player_turn = 1
-    else:
-        player_turn += 1
-    return player_turn
+        return 1
+    return player_turn + 1
 
 
 def display(pawns, fences):

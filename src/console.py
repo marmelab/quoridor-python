@@ -2,7 +2,6 @@ import os
 from action import Action
 from board import Item
 
-
 commands = {
     Action.EXIT: "0",
     Action.DOWN: "2",
@@ -30,9 +29,9 @@ def display_game(board):
         line = "\u25ae "
         for cell in row:
             if cell == Item.PAWN_1:
-                line += "\u25b2 "
+                line += "\033[94m\u25b2\033[0m "
             elif cell == Item.PAWN_2:
-                line += "\u25b3 "
+                line += "\033[92m\u25b2\033[0m "
             elif cell == Item.FENCE:
                 line += "\u25fc "
             elif cell == Item.SQUARE:
@@ -54,7 +53,7 @@ def get_top_border(board):
 
 def prompt_action(player_number):
     print("Possible actions: " + get_action_list())
-    key = prompt("Player #" + str(player_number) + ": Where do you want to move the pawn? ")
+    key = prompt(f"Player # {player_number}: Where do you want to move the pawn? ")
     return get_action(key)
 
 
