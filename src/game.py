@@ -1,48 +1,73 @@
 import math
-from pawn import Pawn, translate_x, translate_y
+from copy import deepcopy
+from pawn import Orientation, Pawn, translate_x, translate_y
 from exception import QuoridorException, OutOfBoardException, UnknownActionException
 from functools import reduce
 from action import Action
 import console
 from board import *
 
+from enum import IntEnum
+
+
+class State(IntEnum):
+    RUNNING = 0,
+    VICTORY = 1,
+    QUIT = 2,
+
 
 def init_game():
     center = math.floor(BASE_LINE_SIZE / 2)
-    return Pawn(0, center)
+    return [Pawn(0, center, Orientation.WEST), Pawn(BASE_LINE_SIZE - 1, center, Orientation.EAST)]
 
 
-def progress(pawn):
-    new_pawn = pawn
+def progress(pawns):
     new_fences = build()
-    quit = False
-    victory = False
+    player_turn = 1
+    state = State.RUNNING
     console.clear()
-    console.prompt("** Welcome to PyQuoridor **\n  Press Enter to start ...")
-    while not(quit or victory):
-        display(new_pawn, new_fences)
-        action = console.prompt_action()
+    console.prompt("\n *** Welcome to PyQuoridor ***\n  Press Enter to start ...")
+    new_pawns = deepcopy(pawns)
+    while state == State.RUNNING:
+        display(new_pawns, new_fences)
+        action = console.prompt_action(player_turn)
         if action == Action.EXIT:
-            quit = True
+            state = State.QUIT
         else:
             try:
-                new_pawn = act(action, new_pawn, new_fences)
+                new_pawns = deepcopy(new_pawns)
+                new_pawn = act(action, new_pawns[player_turn - 1], new_fences)
+                new_pawns[player_turn - 1] = new_pawn
+                if is_a_victory(new_pawn):
+                    state = State.VICTORY
+                else:
+                    player_turn = get_next_player(player_turn, new_pawns)
             except QuoridorException:
                 pass
-        victory = is_a_victory(new_pawn)
-    if victory:
-        display(new_pawn, new_fences)
-        console.display("** You won **")
+    if state == State.VICTORY:
+        display(new_pawns, new_fences)
+        console.display("\n *** Player # " + str(player_turn) + " won ***\n")
 
 
-def display(pawn, fences):
+def get_next_player(player_turn, pawns):
+    return 1 if player_turn + 1 > len(pawns) else player_turn + 1
+
+
+def display(pawns, fences):
     console.clear()
-    board = get_board(pawn, fences)
+    board = get_board(pawns, fences)
     console.display_game(board)
 
 
 def is_a_victory(pawn):
-    return pawn.x == BASE_LINE_SIZE - 1
+    victory: None
+    if pawn.goal == Orientation.EAST:
+        victory = pawn.x == 0
+    elif pawn.goal == Orientation.WEST:
+        victory = pawn.x == BASE_LINE_SIZE - 1
+    else:
+        raise QuoridorException("This version supports only 2 players")
+    return victory
 
 
 def act(action, pawn, fences):

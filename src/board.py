@@ -12,7 +12,8 @@ class Item(IntEnum):
     NO_FENCE = 0
     FENCE = 1
     SQUARE = 2
-    PAWN = 3
+    PAWN_1 = 3
+    PAWN_2 = 4
 
 
 class Direction(IntEnum):
@@ -31,26 +32,23 @@ def build():
     return fences
 
 
-def get_board(pawn, fences):
-    if (is_out_of_board(pawn)):
-        raise OutOfBoardException("The pawn is out of the board")
-    board = generate_default_board(pawn)
+def get_board(pawns, fences):
+    board = get_empty_board()
+    i = 0
+    for pawn in pawns:
+        if (is_out_of_board(pawn)):
+            raise OutOfBoardException("The pawn is out of the board")
+        board[pawn.y][pawn.x] = get_pawn_item(i)
+        i += 1
     return add_fences(board, fences)
 
 
-def generate_default_board(pawn):
-    board = []
-    for y in range(BASE_LINE_SIZE):
-        line = []
-        for x in range(BASE_LINE_SIZE):
-            if pawn.x == x and pawn.y == y:
-                line.append(Item.PAWN)
-            elif is_odd(x) or is_odd(y):
-                line.append(Item.NO_FENCE)
-            else:
-                line.append(Item.SQUARE)
-        board.append(line)
-    return board
+def get_pawn_item(index):
+    return Item.PAWN_1 if index == 0 else Item.PAWN_2
+
+
+def get_empty_board():
+    return [[Item.NO_FENCE if is_odd(x) or is_odd(y) else Item.SQUARE for x in range(BASE_LINE_SIZE)] for y in range(BASE_LINE_SIZE)]
 
 
 def is_odd(number):
