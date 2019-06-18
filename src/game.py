@@ -50,9 +50,7 @@ def progress(pawns):
 
 
 def get_next_player(player_turn, pawns):
-    if player_turn + 1 > len(pawns):
-        return 1
-    return player_turn + 1
+    return 1 if player_turn + 1 > len(pawns) else player_turn + 1
 
 
 def display(pawns, fences):
