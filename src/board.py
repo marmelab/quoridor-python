@@ -2,10 +2,11 @@ import math
 from random import randint
 from copy import deepcopy
 from enum import IntEnum
-from exception import OutOfBoardException
+from exception import OutOfBoardException, QuoridorException
 
 FENCE_SIZE = 8
 BASE_LINE_SIZE = 17
+FENCE_NUMBER = 10
 
 
 class Item(IntEnum):
@@ -22,14 +23,58 @@ class Direction(IntEnum):
     VERTICALLY = 2
 
 
+class Fence:
+
+    def __init__(self, x, y, direction):
+        self.x = x
+        self.y = y
+        self.direction = direction
+
+
 def build():
     fences = [[Direction.NO for i in range(FENCE_SIZE)] for j in range(FENCE_SIZE)]
-    for i in range(10):
-        center_x = randint(0, FENCE_SIZE - 1)
-        center_y = randint(0, FENCE_SIZE - 1)
-        direction = randint(Direction.HORIZONTALLY, Direction.VERTICALLY)
-        fences[center_x][center_y] = direction
+    for i in range(FENCE_NUMBER):
+        fence = add_random_fence(fences)
+        fences[fence.y][fence.x] = fence.direction
     return fences
+
+
+def add_random_fence(fences):
+    center_x = randint(0, FENCE_SIZE - 1)
+    center_y = randint(0, FENCE_SIZE - 1)
+    direction = randint(Direction.HORIZONTALLY, Direction.VERTICALLY)
+    if can_add_fence(fences, center_x, center_y, direction):
+        return Fence(center_x, center_y, direction)
+    return add_random_fence(fences)
+
+
+def can_add_fence(fences, x, y, direction):
+    if not is_fence_inside_grid(x, y, fences) or direction == Direction.NO:
+        return False
+    fence = fences[y][x]
+    if fence != Direction.NO:
+        return False
+    if direction == Direction.HORIZONTALLY:
+        previous_fence = get_fence_direction(fences, x - 1, y)
+        next_fence = get_fence_direction(fences, x + 1, y)
+        return previous_fence != Direction.HORIZONTALLY and next_fence != Direction.HORIZONTALLY
+    if direction == Direction.VERTICALLY:
+        previous_fence = get_fence_direction(fences, x, y - 1)
+        next_fence = get_fence_direction(fences, x, y + 1)
+        return previous_fence != Direction.VERTICALLY and next_fence != Direction.VERTICALLY
+    return True
+
+
+def get_fence_direction(fences, x, y):
+    return Direction.NO if not is_fence_inside_grid(x, y, fences) else fences[y][x]
+
+
+def is_fence_inside_grid(x, y, fences):
+    return is_inside_fences(x, fences) and is_inside_fences(y, fences)
+
+
+def is_inside_fences(coord, fences):
+    return coord >= 0 and coord < len(fences)
 
 
 def get_board(pawns, fences):

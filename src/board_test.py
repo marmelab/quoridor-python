@@ -318,3 +318,139 @@ class TestBoard(unittest.TestCase):
         actual = is_crossable_down(pawn, fences)
         # Then
         self.assertFalse(actual, "In the board, the pawn should be placed in the bottom right of the board")
+
+    def test_can_add_fence_should_add_vertical_fence(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 0, 3, Direction.VERTICALLY)
+        # Then
+        self.assertTrue(actual, "It should be possible to add a vertical fence")
+
+    def test_can_add_fence_should_add_horizontal_fence(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 0, 3, Direction.HORIZONTALLY)
+        # Then
+        self.assertTrue(actual, "It should be possible to add a horizontal fence")
+
+    def test_can_add_fence_should_not_validate_the_horizontal_fence_at_the_lef_of_another_one(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 0, 3, Direction.HORIZONTALLY)
+        # Then
+        self.assertFalse(actual, "It should not be possible to add a horizontal fence at the left of another one")
+
+    def test_can_add_fence_should_not_validate_the_horizontal_fence_at_the_right_of_another_one(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 2, 3, Direction.HORIZONTALLY)
+        # Then
+        self.assertFalse(actual, "It should not be possible to add a horizontal fence at the right of another one")
+
+    def test_can_add_fence_should_not_validate_the_vertical_fence_at_the_top_of_another_one(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 2, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 1, 2, Direction.VERTICALLY)
+        # Then
+        self.assertFalse(actual, "It should not be possible to add a vertical fence at the top of another one")
+
+    def test_can_add_fence_should_not_validate_the_vertical_fence_at_the_bottom_of_another_one(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 2, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 1, 4, Direction.VERTICALLY)
+        # Then
+        self.assertFalse(actual, "It should not be possible to add a vertical fence at the bottom of another one")
+
+    def test_can_add_fence_should_add_horizontal_fence_close_to_vertical_one(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 2, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 0, 3, Direction.HORIZONTALLY)
+        # Then
+        self.assertTrue(actual, "It should not be possible to add a horizontal fence")
+
+    def test_can_add_fence_should_not_add_fence_on_an_existing_fence(self):
+        # Given
+        fences = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 2, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        # When
+        actual = can_add_fence(fences, 1, 3, Direction.HORIZONTALLY)
+        # Then
+        self.assertFalse(actual, "It should not be possible to add a fence on an existing one")
